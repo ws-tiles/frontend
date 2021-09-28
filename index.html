@@ -28,26 +28,29 @@
             height: 30px;
             width: 290px;
         }
-        #send-container {
-      position: absolute;
-      bottom: 0;
-      background-color: white;
-    width: 300px;
-      display: flex;
-    }
 
-    #message-input {
-      flex-grow: 1;
-    }
+        #send-container {
+            position: absolute;
+            bottom: 0;
+            background-color: white;
+            width: 300px;
+            display: flex;
+        }
+
+        #message-input {
+            flex-grow: 1;
+        }
     </style>
     <title>Document</title>
 </head>
 
 <body>
     <h1>Tile Game</h1>
-    <button id='btnCreate'>New Game</button>
-    <button id='btnJoin'>Join Game</button>
-    <input type='text' id='txtGameId'>
+    <div class="menu" id="menu">
+        <button id='btnCreate'>New Game</button>
+        <button id='btnJoin'>Join Game</button>
+        <input type='text' id='txtGameId'>
+    </div>
     <div id='divPlayers'></div>
     <div id='divBoard'></div>
     <!-- <div class="chatContainer" id="chatContainer">
@@ -62,8 +65,9 @@
         let clientId = null;
         let gameId = null;
         let playerColor = null;
-
-        let ws = new WebSocket("wss://radialv1.herokuapp.com/")
+        // let url = "wss://radialv1.herokuapp.com/";
+        let ws = new WebSocket(`wss://${location.host}/`)
+        const menuContainer = document.getElementById('menu');
         const btnCreate = document.getElementById("btnCreate");
         const btnJoin = document.getElementById("btnJoin");
         const txtGameId = document.getElementById("txtGameId");
@@ -99,6 +103,8 @@
 
         })
 
+        ws.onerror = (e) => console.log(e);
+
         ws.onmessage = message => {
             //message.data
             const response = JSON.parse(message.data);
@@ -129,6 +135,7 @@
 
             //join
             if (response.method === "join") {
+                menuContainer.style.display = 'none';
                 const game = response.game;
 
                 while (divPlayers.firstChild)
