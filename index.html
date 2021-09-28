@@ -49,7 +49,8 @@
     <div class="menu" id="menu">
         <button id='btnCreate'>New Game</button>
         <button id='btnJoin'>Join Game</button>
-        <input type='text' id='txtGameId'>
+        <input type='text' placeholder="room ID" id='txtGameId'>
+        <input type="text" placeholder="nickname" id="nickname">
     </div>
     <div id='divPlayers'></div>
     <div id='divBoard'></div>
@@ -65,8 +66,8 @@
         let clientId = null;
         let gameId = null;
         let playerColor = null;
-        let url = "wss://radialv1.herokuapp.com/";
-        let ws = new WebSocket(url);
+        // let url = "wss://radialv1.herokuapp.com/";
+        let ws = new WebSocket(`wss://${location.host}/`)
         const menuContainer = document.getElementById('menu');
         const btnCreate = document.getElementById("btnCreate");
         const btnJoin = document.getElementById("btnJoin");
@@ -74,6 +75,7 @@
         const divPlayers = document.getElementById("divPlayers");
         const divBoard = document.getElementById("divBoard");
         const chatBox = document.getElementById('chatBox')
+        const nickname = document.getElementById('nickname');
 
 
         //wiring events
@@ -85,7 +87,8 @@
             const payLoad = {
                 "method": "join",
                 "clientId": clientId,
-                "gameId": gameId
+                "gameId": gameId,
+                "nickname": nickname || null
             }
 
             ws.send(JSON.stringify(payLoad));
@@ -146,7 +149,7 @@
                     const d = document.createElement("div");
                     d.style.width = "200px";
                     d.style.background = c.color
-                    d.textContent = c.clientId;
+                    d.textContent = c.nickname || c.clientId;
                     divPlayers.appendChild(d);
 
                     if (c.clientId === clientId) playerColor = c.color;
