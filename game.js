@@ -1,4 +1,4 @@
-//HTML elements and vars
+//HTML elements
 let clientId = null;
 let gameId = null;
 let playerColor = null;
@@ -59,6 +59,7 @@ ws.onmessage = message => {
         gameId = response.game.id;
         navigator.clipboard.writeText(gameId);
         console.log("game successfully created with id " + response.game.id + " with " + response.game.balls + " balls")
+        btnJoin.click();
     }
 
 
