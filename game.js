@@ -1,4 +1,4 @@
-//HTML elements
+//HTML elements and vars
 let clientId = null;
 let gameId = null;
 let playerColor = null;
