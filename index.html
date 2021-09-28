@@ -65,8 +65,8 @@
         let clientId = null;
         let gameId = null;
         let playerColor = null;
-        // let url = "wss://radialv1.herokuapp.com/";
-        let ws = new WebSocket(`wss://${location.host}/`)
+        let url = "wss://radialv1.herokuapp.com/";
+        let ws = new WebSocket(url);
         const menuContainer = document.getElementById('menu');
         const btnCreate = document.getElementById("btnCreate");
         const btnJoin = document.getElementById("btnJoin");
