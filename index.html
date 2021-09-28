@@ -5,52 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./main.css">
-    <style>
-        .chatContainer {
-            /* display: flex;
-            flex-wrap: wrap; */
-            position: relative;
-            border: 2px solid black;
-            /* flex: 0 0 100%; */
-            width: 300px;
-            height: 300px;
-        }
-
-        .bar {
-            display: flex;
-            flex-wrap: wrap;
-            /* flex: 0 0 50%; */
-        }
-
-        .chatInput {
-            position: absolute;
-            bottom: 0;
-            height: 30px;
-            width: 290px;
-        }
-
-        #send-container {
-            position: absolute;
-            bottom: 0;
-            background-color: white;
-            width: 300px;
-            display: flex;
-        }
-
-        #message-input {
-            flex-grow: 1;
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <script src="./game.js" defer></script>
     <title>Document</title>
 </head>
 
 <body>
-    <h1>Tile Game</h1>
+    <div id="heading">
+        <h1>Tile Game</h1>
+
+    </div>
     <div class="menu" id="menu">
-        <button id='btnCreate'>New Game</button>
-        <button id='btnJoin'>Join Game</button>
-        <input type='text' placeholder="room ID" id='txtGameId'>
-        <input type="text" placeholder="nickname" id="nickname">
+        <div class="content spaceBetween">
+            <button id='btnCreate'>New Game</button>
+            <button id='btnJoin'>Join Game</button>
+            <input type='text' placeholder="room ID" id='txtGameId'>
+            <input type="text" placeholder="nickname" id="nickname">
+        </div>
     </div>
     <div id='divPlayers'></div>
     <div id='divBoard'></div>
@@ -61,132 +34,6 @@
         </form>
     </div> -->
 
-    <script>
-        //HTML elements
-        let clientId = null;
-        let gameId = null;
-        let playerColor = null;
-        let url = "wss://radialv1.herokuapp.com/";
-        let ws = new WebSocket(url);
-        const menuContainer = document.getElementById('menu');
-        const btnCreate = document.getElementById("btnCreate");
-        const btnJoin = document.getElementById("btnJoin");
-        const txtGameId = document.getElementById("txtGameId");
-        const divPlayers = document.getElementById("divPlayers");
-        const divBoard = document.getElementById("divBoard");
-        const chatBox = document.getElementById('chatBox')
-        const nickname = document.getElementById('nickname');
-
-
-        //wiring events
-        btnJoin.addEventListener("click", e => {
-
-            if (gameId === null)
-                gameId = txtGameId.value;
-
-            const payLoad = {
-                "method": "join",
-                "clientId": clientId,
-                "gameId": gameId,
-                "nickname": nickname || null
-            }
-
-            ws.send(JSON.stringify(payLoad));
-
-        })
-
-        btnCreate.addEventListener("click", e => {
-
-            const payLoad = {
-                "method": "create",
-                "clientId": clientId
-            }
-
-            ws.send(JSON.stringify(payLoad));
-
-        })
-
-        ws.onerror = (e) => console.log(e);
-
-        ws.onmessage = message => {
-            //message.data
-            const response = JSON.parse(message.data);
-            //connect
-            if (response.method === "connect") {
-                clientId = response.clientId;
-                console.log("Client id Set successfully " + clientId)
-            }
-
-            //create
-            if (response.method === "create") {
-                gameId = response.game.id;
-                console.log("game successfully created with id " + response.game.id + " with " + response.game.balls + " balls")
-            }
-
-
-            //update
-            if (response.method === "update") {
-                //{1: "red", 1}
-                if (!response.game.state) return;
-                for (const b of Object.keys(response.game.state)) {
-                    const color = response.game.state[b];
-                    const ballObject = document.getElementById("ball" + b);
-                    ballObject.style.backgroundColor = color
-                }
-
-            }
-
-            //join
-            if (response.method === "join") {
-                menuContainer.style.display = 'none';
-                const game = response.game;
-
-                while (divPlayers.firstChild)
-                    divPlayers.removeChild(divPlayers.firstChild)
-
-                game.clients.forEach(c => {
-                    console.log(c.nickname);
-                    const d = document.createElement("div");
-                    d.style.width = "200px";
-                    d.style.background = c.color
-                    d.textContent = c.nickname || c.clientId;
-                    divPlayers.appendChild(d);
-
-                    if (c.clientId === clientId) playerColor = c.color;
-                })
-
-
-                while (divBoard.firstChild)
-                    divBoard.removeChild(divBoard.firstChild)
-
-                for (let i = 0; i < game.balls; i++) {
-
-                    const b = document.createElement("button");
-                    b.id = "ball" + (i + 1);
-                    b.tag = i + 1
-                    b.textContent = i + 1
-                    b.style.width = "20%"
-                    b.style.height = "100px"
-                    b.addEventListener("click", e => {
-                        b.style.background = playerColor
-                        const payLoad = {
-                            "method": "play",
-                            "clientId": clientId,
-                            "gameId": gameId,
-                            "ballId": b.tag,
-                            "color": playerColor
-                        }
-                        ws.send(JSON.stringify(payLoad))
-                    })
-                    divBoard.appendChild(b);
-                }
-
-
-
-
-            }
-        }
-    </script>
 </body>
 
 </html>

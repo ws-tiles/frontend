@@ -1,13 +1,55 @@
+
+
 * {
     margin: 0;
     padding: 0;
+    font-family: 'Roboto Mono', monospace;
 }
 
 #divBoard {
     position: relative;
     padding-left: 30%;
     padding-right: 30%;
+    padding-top: 30px;
     display: flex;
     flex-wrap: wrap;
 }
 
+#heading {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+#menu {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.spaceBetween {
+    justify-content: space-between;
+}
+
+.game-tile {
+    height: 100px;
+    width: 20%;
+}
+
+@media (max-width: 767px) {
+    #divBoard {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 10px;
+    }
+    
+    .game-tile {
+        height: 70px;
+    }
+
+    #divPlayers {
+        display: none;
+    }
+}
