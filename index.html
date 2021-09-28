@@ -67,7 +67,7 @@
         let gameId = null;
         let playerColor = null;
         let url = "wss://radialv1.herokuapp.com/";
-        let ws = new WebSocket(url)
+        let ws = new WebSocket(url);
         const menuContainer = document.getElementById('menu');
         const btnCreate = document.getElementById("btnCreate");
         const btnJoin = document.getElementById("btnJoin");
@@ -145,7 +145,7 @@
                     divPlayers.removeChild(divPlayers.firstChild)
 
                 game.clients.forEach(c => {
-
+                    console.log(c.nickname);
                     const d = document.createElement("div");
                     d.style.width = "200px";
                     d.style.background = c.color
