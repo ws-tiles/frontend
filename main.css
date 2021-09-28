@@ -1,0 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#divBoard {
+    position: relative;
+    padding-left: 30%;
+    padding-right: 30%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
